@@ -135,6 +135,11 @@ export default function Sidebar({ focusMode = false }) {
           >
             <LogOut size={16} /> Logout
           </button>
+          
+          <div className="mt-4 pt-4 border-t border-white/5 text-center">
+            <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em]">Built with ❤️ by</p>
+            <p className="text-xs font-bold text-slate-300 mt-1">Dhruv Choudhary</p>
+          </div>
         </div>
       </aside>
     </>
