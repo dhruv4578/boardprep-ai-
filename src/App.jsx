@@ -11,14 +11,11 @@ import Doubts from './pages/Doubts';
 import Planner from './pages/Planner';
 import Revision from './pages/Revision';
 import Flashcards from './pages/Flashcards';
-import NCERT from './pages/NCERT';
-import Auth from './pages/Auth';
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 import WelcomeModal from './components/WelcomeModal';
 import { useLocalStorage, storageKeys } from './hooks/useLocalStorage';
-import { getCurrentUser } from './utils/auth';
 
 function App() {
-  const user = getCurrentUser();
   const [focusMode, setFocusMode] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   
@@ -163,18 +160,68 @@ function App() {
 
       {/* Main Router */}
       <Routes>
-        <Route path="/auth" element={<Auth />} />
-        <Route element={user ? <Layout focusMode={focusMode} /> : <Navigate to="/auth" replace />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/study" element={<Study />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/doubts" element={<Doubts />} />
-          <Route path="/planner" element={<Planner />} />
-          <Route path="/flashcards" element={<Flashcards />} />
-          <Route path="/ncert" element={<NCERT />} />
-          <Route path="/revision" element={<Revision />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
+        <Route path="/" element={
+          <>
+            <SignedIn>
+              <Layout focusMode={focusMode}>
+                <Dashboard />
+              </Layout>
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          </>
+        } />
+        
+        <Route path="/study" element={
+          <SignedIn>
+            <Layout focusMode={focusMode}>
+              <Study />
+            </Layout>
+          </SignedIn>
+        } />
+
+        <Route path="/quiz" element={
+          <SignedIn>
+            <Layout focusMode={focusMode}>
+              <Quiz />
+            </Layout>
+          </SignedIn>
+        } />
+
+        <Route path="/doubts" element={
+          <SignedIn>
+            <Layout focusMode={focusMode}>
+              <Doubts />
+            </Layout>
+          </SignedIn>
+        } />
+
+        <Route path="/planner" element={
+          <SignedIn>
+            <Layout focusMode={focusMode}>
+              <Planner />
+            </Layout>
+          </SignedIn>
+        } />
+
+        <Route path="/flashcards" element={
+          <SignedIn>
+            <Layout focusMode={focusMode}>
+              <Flashcards />
+            </Layout>
+          </SignedIn>
+        } />
+
+        <Route path="/revision" element={
+          <SignedIn>
+            <Layout focusMode={focusMode}>
+              <Revision />
+            </Layout>
+          </SignedIn>
+        } />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

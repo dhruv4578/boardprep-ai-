@@ -1,21 +1,11 @@
 import { useState, useEffect } from 'react';
-
-// Get current user prefix for data segregation
-const getUserPrefix = () => {
-  if (typeof window === "undefined") return '';
-  try {
-    const user = window.localStorage.getItem('BOARD_PREP_CURRENT_USER');
-    if (user) {
-      const parsed = JSON.parse(user);
-      return parsed.username + '_';
-    }
-  } catch(e) {}
-  return '';
-};
+import { useUser } from '@clerk/clerk-react';
 
 // Custom hook for localStorage State
 export function useLocalStorage(baseKey, initialValue) {
-  const key = getUserPrefix() + baseKey;
+  const { user } = useUser();
+  const prefix = user ? `${user.id}_` : '';
+  const key = prefix + baseKey;
 
   // State to store our value
   const [storedValue, setStoredValue] = useState(() => {
@@ -53,4 +43,5 @@ export const storageKeys = {
   SCORES: 'boardprep_quiz_scores',
   BOOKMARKS: 'boardprep_bookmarks',
   PLANNER: 'boardprep_study_plans',
+  PROGRESS: 'boardprep_progress',
 };

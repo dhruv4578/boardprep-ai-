@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Download, Bookmark, BookOpen, AlertCircle, Loader2, BrainCircuit } from 'lucide-react';
+import { Download, Bookmark, BookOpen, AlertCircle, Loader2, BrainCircuit, CheckCircle2 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 
 import GlassCard from '../components/GlassCard';
@@ -15,6 +15,7 @@ export default function Study() {
   const [notes, setNotes] = useState(null);
   const [currentTopic, setCurrentTopic] = useState(null);
   const [bookmarks, setBookmarks] = useLocalStorage(storageKeys.BOOKMARKS, []);
+  const [progress, setProgress] = useLocalStorage(storageKeys.PROGRESS, {});
   
   const contentRef = useRef(null);
 
@@ -77,6 +78,26 @@ export default function Study() {
     }
   };
 
+  const isCompleted = currentTopic && progress[currentTopic.subject]?.includes(currentTopic.topic);
+
+  const toggleComplete = () => {
+    if (!currentTopic) return;
+    const { subject, topic } = currentTopic;
+    const currentSubjectProgress = progress[subject] || [];
+    
+    let updatedSubjectProgress;
+    if (isCompleted) {
+      updatedSubjectProgress = currentSubjectProgress.filter(t => t !== topic);
+    } else {
+      updatedSubjectProgress = [...currentSubjectProgress, topic];
+    }
+
+    setProgress({
+      ...progress,
+      [subject]: updatedSubjectProgress
+    });
+  };
+
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Header Info */}
@@ -128,6 +149,18 @@ export default function Study() {
             </div>
             <div className="flex gap-3">
               <button 
+                onClick={toggleComplete}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
+                  isCompleted 
+                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.2)]' 
+                    : 'bg-white/5 text-slate-400 border-white/10 hover:bg-emerald-500/10 hover:text-emerald-300 hover:border-emerald-500/20'
+                }`}
+                title={isCompleted ? "Mark as Incomplete" : "Mark as Completed"}
+              >
+                <CheckCircle2 size={18} className={isCompleted ? 'fill-emerald-500/20' : ''} />
+                <span className="text-sm font-medium">{isCompleted ? 'Completed' : 'Mark Done'}</span>
+              </button>
+              <button 
                 onClick={toggleBookmark}
                 className={`p-2 rounded-xl transition-all ${isBookmarked ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.2)]' : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'}`}
                 title={isBookmarked ? "Remove Bookmark" : "Save to Bookmarks"}
@@ -139,7 +172,7 @@ export default function Study() {
                 className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-slate-300 hover:text-white rounded-xl transition-all"
               >
                 <Download size={18} />
-                <span className="hidden sm:inline">Export PDF</span>
+                <span className="hidden lg:inline">Export PDF</span>
               </button>
             </div>
           </div>

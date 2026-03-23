@@ -14,8 +14,7 @@ import {
   Book
 } from 'lucide-react';
 import { useState } from 'react';
-
-import { logout, getCurrentUser } from '../utils/auth';
+import { UserButton, useUser } from '@clerk/clerk-react';
 
 const NAV_ITEMS = [
   { name: 'Dashboard', path: '/', icon: Home, color: 'text-blue-400' },
@@ -24,21 +23,16 @@ const NAV_ITEMS = [
   { name: 'AI Doubts', path: '/doubts', icon: MessageSquareQuote, color: 'text-rose-400' },
   { name: 'Planner', path: '/planner', icon: CalendarDays, color: 'text-amber-400' },
   { name: 'Flashcards', path: '/flashcards', icon: Layers, color: 'text-violet-400' },
-  { name: 'NCERT AI', path: '/ncert', icon: Book, color: 'text-emerald-400' },
   { name: '1-Day Revision', path: '/revision', icon: Zap, color: 'text-yellow-400' },
 ];
 
 export default function Sidebar({ focusMode = false }) {
   const [isOpen, setIsOpen] = useState(false);
-  const user = getCurrentUser();
+  const { user } = useUser();
 
   // In focus mode, hidden completely
   if (focusMode) return null;
 
-  const handleLogout = () => {
-    logout();
-    window.location.href = '/auth';
-  };
 
   return (
     <>
@@ -115,26 +109,29 @@ export default function Sidebar({ focusMode = false }) {
           ))}
         </nav>
 
-        {/* Footer Section */}
+        {/* Footer Section - User Profile */}
         <div className="p-6 border-t border-white/10 shrink-0">
-          {user && (
-            <div className="text-center mb-4 text-sm text-slate-300">
-              <span className="opacity-70">Logged in as </span>
-              <span className="font-semibold text-blue-400">{user.username}</span>
-            </div>
-          )}
-          <div className="glass-card p-4 rounded-xl text-center mb-3">
-             <p className="text-xs text-slate-400 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">Target Score: 90%+</p>
+          <div className="flex items-center gap-3 mb-6 p-2 rounded-xl bg-white/5 border border-white/10 shadow-sm transition-all hover:bg-white/10">
+            <UserButton 
+              showName 
+              appearance={{
+                elements: {
+                  userButtonBox: "flex-row-reverse",
+                  userButtonOuterIdentifier: "text-white font-semibold text-sm",
+                }
+              }}
+            />
+          </div>
+          
+          <div className="glass-card p-4 rounded-xl text-center mb-4 border-white/5 bg-white/[0.02]">
+             <div className="flex justify-between items-center mb-1.5">
+               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Target</p>
+               <p className="text-[10px] font-bold text-blue-400">90%+</p>
+             </div>
              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div className="w-[60%] h-full bg-gradient-to-r from-blue-500 to-emerald-400 rounded-full animate-pulse-glow" />
              </div>
           </div>
-          <button 
-            onClick={handleLogout} 
-            className="w-full flex items-center justify-center gap-2 py-2 text-sm text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-lg transition-colors border border-transparent hover:border-rose-500/30"
-          >
-            <LogOut size={16} /> Logout
-          </button>
           
           <div className="mt-4 pt-4 border-t border-white/5 text-center">
             <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em]">Built with ❤️ by</p>

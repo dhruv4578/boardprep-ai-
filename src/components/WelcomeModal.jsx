@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { X, Calendar, Rocket, Sparkles, Trophy } from 'lucide-react';
+import { useUser } from '@clerk/clerk-react';
 import GlassCard from './GlassCard';
 import { useLocalStorage, storageKeys } from '../hooks/useLocalStorage';
-import { getCurrentUser } from '../utils/auth';
 
 export default function WelcomeModal() {
-  const user = getCurrentUser();
+  const { user } = useUser();
   const [plannerData] = useLocalStorage(storageKeys.PLANNER, null);
   const [lastWelcome, setLastWelcome] = useLocalStorage('last_welcome_date', '');
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function WelcomeModal() {
           </div>
 
           <div>
-            <h2 className="text-3xl font-bold text-white mb-2">Welcome Back, {user.name}!</h2>
+            <h2 className="text-3xl font-bold text-white mb-2">Welcome Back, {user?.firstName || 'Student'}!</h2>
             <p className="text-slate-400 text-lg">Ready to make progress today?</p>
           </div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, BrainCircuit, Target, Trophy, Flame, ChevronRight, AlertCircle, Quote, Layers, CheckCircle2, Circle } from 'lucide-react';
+import { BookOpen, BrainCircuit, Target, Trophy, Flame, ChevronRight, AlertCircle, Quote, Layers, CheckCircle2, Circle, BarChart3 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
 import { useLocalStorage, storageKeys } from '../hooks/useLocalStorage';
 
@@ -16,12 +16,21 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [scores] = useLocalStorage(storageKeys.SCORES, []);
   const [plans, setPlans] = useLocalStorage(storageKeys.PLANNER, null);
+  const [progress] = useLocalStorage(storageKeys.PROGRESS, {});
   
   // Calculate stats
   const totalQuizzes = scores.length;
   const avgScore = totalQuizzes > 0 
     ? Math.round(scores.reduce((acc, curr) => acc + (curr.score / curr.total), 0) / totalQuizzes * 100) 
     : 0;
+  
+  // Calculate total syllabus progress
+  const subjects = Object.keys(progress);
+  const totalTopicsCompleted = subjects.reduce((acc, sub) => acc + progress[sub].length, 0);
+  
+  // Mock target topics for visual progress (ideally would be set by user)
+  const targetTopics = 20; 
+  const totalProgress = Math.min(Math.round((totalTopicsCompleted / targetTopics) * 100), 100);
   
   // Get weak areas (topics with score < 60%)
   const weakAreas = scores
@@ -248,6 +257,52 @@ export default function Dashboard() {
 
         {/* Performance Sidebar */}
         <div className="space-y-6">
+          <GlassCard glowColor="blue">
+            <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+              <BarChart3 className="text-blue-400" size={20} />
+              Overall Progress
+            </h3>
+            
+            <div className="space-y-5">
+              <div className="relative pt-1">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-400 bg-blue-500/10 tracking-widest">
+                    Syllabus Mastery
+                  </span>
+                  <span className="text-lg font-bold text-white leading-none">
+                    {totalProgress}%
+                  </span>
+                </div>
+                <div className="overflow-hidden h-2.5 mb-2 text-xs flex rounded-full bg-slate-800">
+                  <div 
+                    style={{ width: `${totalProgress}%` }}
+                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-blue-600 to-emerald-500 transition-all duration-1000 ease-out"
+                  />
+                </div>
+                <p className="text-[10px] text-slate-500 mt-1">{totalTopicsCompleted} topics completed so far</p>
+              </div>
+
+              {subjects.length > 0 && (
+                <div className="border-t border-white/5 pt-4 space-y-3">
+                  {subjects.slice(0, 3).map(sub => (
+                    <div key={sub}>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-400">{sub}</span>
+                        <span className="text-slate-200">{progress[sub].length} topics</span>
+                      </div>
+                      <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-blue-500/40" 
+                          style={{ width: `${Math.min((progress[sub].length / 5) * 100, 100)}%` }} 
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </GlassCard>
+
           <GlassCard>
             <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
               <Trophy className="text-yellow-400" size={20} />
