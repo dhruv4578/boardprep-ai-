@@ -13,8 +13,8 @@ function ClerkSetupSplash() {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 flex items-center justify-center p-4">
       <div className="max-w-md w-full glass-panel p-8 rounded-3xl border-blue-500/20 shadow-2xl text-center space-y-6">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mx-auto shadow-lg shadow-blue-500/20 mb-2">
-          <BrainCircuit size={32} className="text-white" />
+        <div className="w-24 h-24 rounded-3xl bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center mx-auto shadow-xl shadow-blue-500/10 mb-4 p-4">
+          <img src="/logo.png" alt="BoardPrep AI" className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]" />
         </div>
         
         <h1 className="text-3xl font-bold text-white">Setup Required</h1>
@@ -56,7 +56,19 @@ createRoot(document.getElementById('root')).render(
     {isKeyInvalid ? (
       <ClerkSetupSplash />
     ) : (
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+      <ClerkProvider 
+        publishableKey={PUBLISHABLE_KEY}
+        appearance={{
+          elements: {
+            formButtonPrimary: 'bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20',
+            card: 'glass-panel border-white/10 shadow-2xl',
+          },
+          layout: {
+            logoImageUrl: '/logo.png',
+            logoPlacement: 'inside'
+          }
+        }}
+      >
         <App />
       </ClerkProvider>
     )}

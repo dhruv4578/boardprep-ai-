@@ -48,8 +48,8 @@ export default function WelcomeModal() {
 
         <div className="text-center space-y-6 pt-4">
           <div className="relative inline-block">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20 rotate-3 animate-pulse">
-              <Rocket size={40} className="text-white -rotate-12" />
+            <div className="w-24 h-24 rounded-3xl bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20 rotate-3 animate-fade-in p-4">
+              <img src="/logo.png" alt="BoardPrep AI" className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]" />
             </div>
             <Sparkles className="absolute -top-2 -right-2 text-amber-400 animate-bounce" size={24} />
           </div>

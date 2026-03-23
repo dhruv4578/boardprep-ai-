@@ -60,11 +60,10 @@ export default function Sidebar({ focusMode = false }) {
         glass-panel border-y-0 border-l-0 rounded-none bg-[#0f172a]/95 backdrop-blur-2xl
         flex flex-col h-screen
       `}>
-        {/* Logo Section */}
         <div className="h-20 flex items-center px-6 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <BrainCircuit className="text-white relative top-[-1px]" size={24} />
+            <div className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center p-1.5 shadow-lg shadow-blue-500/10">
+              <img src="/logo.png" alt="BoardPrep AI" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-white tracking-wide">BoardPrep <span className="text-blue-400">AI</span></h1>
