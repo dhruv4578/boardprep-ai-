@@ -160,68 +160,25 @@ function App() {
 
       {/* Main Router */}
       <Routes>
-        <Route path="/" element={
+        <Route element={
           <>
             <SignedIn>
-              <Layout focusMode={focusMode}>
-                <Dashboard />
-              </Layout>
+              <Layout focusMode={focusMode} />
             </SignedIn>
             <SignedOut>
               <RedirectToSignIn />
             </SignedOut>
           </>
-        } />
-        
-        <Route path="/study" element={
-          <SignedIn>
-            <Layout focusMode={focusMode}>
-              <Study />
-            </Layout>
-          </SignedIn>
-        } />
-
-        <Route path="/quiz" element={
-          <SignedIn>
-            <Layout focusMode={focusMode}>
-              <Quiz />
-            </Layout>
-          </SignedIn>
-        } />
-
-        <Route path="/doubts" element={
-          <SignedIn>
-            <Layout focusMode={focusMode}>
-              <Doubts />
-            </Layout>
-          </SignedIn>
-        } />
-
-        <Route path="/planner" element={
-          <SignedIn>
-            <Layout focusMode={focusMode}>
-              <Planner />
-            </Layout>
-          </SignedIn>
-        } />
-
-        <Route path="/flashcards" element={
-          <SignedIn>
-            <Layout focusMode={focusMode}>
-              <Flashcards />
-            </Layout>
-          </SignedIn>
-        } />
-
-        <Route path="/revision" element={
-          <SignedIn>
-            <Layout focusMode={focusMode}>
-              <Revision />
-            </Layout>
-          </SignedIn>
-        } />
-
-        <Route path="*" element={<Navigate to="/" replace />} />
+        }>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/study" element={<Study />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/doubts" element={<Doubts />} />
+          <Route path="/planner" element={<Planner />} />
+          <Route path="/flashcards" element={<Flashcards />} />
+          <Route path="/revision" element={<Revision />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
